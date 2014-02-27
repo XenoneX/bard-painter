@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>HTML5 Rooms planner v2</title>
+    <link rel="stylesheet" type="text/css" href="css/bard-room-planner.css">
+    <script src="js/tools.js"></script>
+    <script src="js/main.js"></script>
+</head>
+<body>
+    <div id="paint-body" class="bard-room-planner" style="width: 1000px;height: 600px; margin: auto;"></div>
+    <script>
+        paintInit({
+            parentId: 'paint-body',
+            done: function() {
+                log('done event');
+            },
+            confirm: function() {
+                log('confirm event');
+            },
+            destroy: function() {
+                log('destroy event');
+            }
+        });
+    </script>
+</body>
+</html>

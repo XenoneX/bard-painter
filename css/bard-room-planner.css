@@ -1,0 +1,51 @@
+.bard-room-planner .cursor {
+    cursor: url(../img/pencil.png) 0 21, auto;
+}
+.bard-room-planner canvas {
+    position: relative;
+    top: 0;
+}
+.bard-room-planner #plan2d {
+    left: 0;
+    z-index: 1;
+}
+.bard-room-planner #overlay {
+	right: -100%;
+    z-index: 2;
+    background: rgba(0, 0, 0, 0.6);
+    -webkit-transition: right 0.3s;
+    -moz-transition: right 0.3s;
+    -o-transition: right 0.3s;
+    -ms-transition: right 0.3s;
+    transition: right 0.3s;
+	position:relative;
+}
+.bard-room-planner #filling {
+	z-index: 2;
+    background: rgba(0, 0, 0, 0.6);
+    -webkit-transition: right 0.3s;
+    -moz-transition: right 0.3s;
+    -o-transition: right 0.3s;
+    -ms-transition: right 0.3s;
+    transition: right 0.3s;
+	position:relative;
+}
+.bard-room-planner .hidden {
+    display: none;
+}
+
+.bard-room-planner #infoblock {
+	background-color: #0b5090;
+	border-top : 1px dashed #1E66A1;
+	box-shadow: 0 0 6px #000000;
+	color: white;
+    position: relative;
+	width: 100%;
+	z-index: 1;
+}
+.bard-room-planner #infoblock .infoBody {
+	padding: 5px;
+}
+.bard-room-planner #infoText {
+	margin: 0 auto;
+}
