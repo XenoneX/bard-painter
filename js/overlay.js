@@ -1,3 +1,6 @@
+function overlay(param) {
+
+
 param.overlay.rmode = false;
 param.overlay.customAngle = false;
 param.overlay.points = {};
@@ -43,6 +46,175 @@ param.overlay.draw = function() {
     var TEXT_BTN_CLEAR = 'Очистить';
 
     var WIDTH = param.overlay.options.width;
+
+    ////////////\\\\\\\\\\\\
+    // Interface elements \\
+    function Button(opt) {
+        // options = {
+        //   active: активность кнопки (Boolean),
+        //   hidden: сокрытие кнопки (Boolean),
+        //   over: указатель над кнопкой (Boolean),
+        //   text: [текст на кнопке (Array)],
+        //   style: {стиль кнопки (Object)},
+        //   pos: {
+        //     x: x координата (Number),
+        //     y: y координата (Number)
+        //   },
+        //   size: {
+        //     w: ширина кнопки (Number),
+        //     h: высота кнопки (Number)
+        //   },
+        //   r: радиус скругления углов (Number),
+        //   mouse: {
+        //     x: x координата мыши (Number),
+        //     y: y координата мыши (Number)
+        //   },
+        //   ctx: контекст холста
+        // }
+
+        this.active = true;
+        this.hidden = true;
+        this.over = false;
+
+        this.mouse = {
+            x: null,
+            y: null
+        };
+
+        this.ctx = opt.ctx || param.ctx;
+
+        this.text = opt.text || ['Button'];
+
+        if (opt.style) {
+            this.style = {};
+            for (var i in opt.style) {
+                this.style[i] = opt.style[i];
+            }
+
+            if (!this.style.bg) { //temporary solution
+                this.style.bg = param.button.style.main.bg;
+            }
+            if (!this.style.txt) { //temporary solution
+                this.style.txt = param.button.style.main.txt;
+            }
+        } else {
+            this.style = param.button.style.main;
+        }
+        this.style.font = this.style.font || param.fontStyle;
+
+        this.r = opt.r || param.borderBoxRadius || 2;
+
+        var m = param.button.m || 0;
+        this.m = m;
+
+        this.l = 0; //задаёт цепочку кнопок
+
+        var x = 0;
+        var y = 0;
+        if (opt.pos) {
+            x = (opt.pos.x || x) + m;
+            y = (opt.pos.y || y) + m;
+        }
+
+        this.ctx.save();
+        this.ctx.font = this.style.font;
+            var w = this.ctx.measureText(this.text[0]).width + 10;
+        this.ctx.restore();
+
+        var h = param.button.h || 14;
+        if (opt.size) {
+            w = opt.size.w || w;
+            h = opt.size.h || h;
+        }
+
+        var align = this.style.align || 'left';
+        if (align == 'right') {
+            x -= w + 2 * m;
+        } else if (align == 'center') {
+            x -= w / 2 + m;
+        }
+
+        var valign = this.style.valign || 'top';
+        if (valign == 'bottom') {
+            y -= h + 2 * m;
+        } else if (valign == 'middle') {
+            y -= h / 2 + m;
+        }
+
+        this.pos = {
+            x: x,
+            y: y
+        };
+        this.size = {
+            w: w,
+            h: h
+        };
+    }
+
+    Button.prototype.hide = function() {
+        if (!this.hidden) {
+            this.hidden = true;
+        }
+        return this;
+    };
+
+    Button.prototype.show = function() {
+        if (this.hidden) {
+            this.hidden = false;
+        }
+        return this;
+    };
+
+    Button.prototype.draw = function(coords, dX) {
+
+        if (this.hidden) {
+            this.over = false;
+            return this;
+        }
+
+        dX = dX || 0;
+        coords = coords || this.mouse;
+
+        this.active = param.window.focus;
+
+        var x = this.pos.x + dX;
+        var y = this.pos.y;
+
+        var w = this.size.w;
+        var h = this.size.h;
+        var r = this.r;
+
+        var ctx = this.ctx;
+
+        ctx.save();
+        this.ctx.font = this.style.font;
+        ctx.fillStyle = this.style.bg.off;
+        ctx.roundedRect(x, y, w, h, r);
+
+        if (this.active) {
+            this.over = ctx.isPointInPath(coords.x, coords.y);
+
+            if (this.over && !param.dragEvent) {
+                ctx.fillStyle = this.style.bg.on;
+            }
+            ctx.fill();
+            ctx.fillStyle = this.style.txt.on;
+        } else {
+            ctx.fill();
+            ctx.fillStyle = this.style.txt.off;
+        }
+        ctx.textAlign = 'center';
+        ctx.fillText(this.text[0], x + w/2, y + h/2 + 4);
+
+        ctx.restore();
+
+        this.l = x + w;
+
+        ////////////
+        param.button.over = this.over || param.button.over;
+
+        return this;
+    };
 
     /////////////////////
     var w0 = param.width;
@@ -261,7 +433,7 @@ param.overlay.mouseUpHandler = function(e) {
         case 'clear':
             param.overlay.customAngle = false;
 
-            clearPlan();
+            param.clearPlan();
 
             this.hide();
             break;
@@ -302,3 +474,5 @@ param.overlay.hide = function() {
         this.canv.style.background = '';
     }
 };
+
+}

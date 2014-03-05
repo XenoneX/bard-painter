@@ -1,3 +1,6 @@
+function infoblock(param) {
+
+
 var TimeToFade = 1000.0 ;
 
 param.infoblock.handler = {
@@ -131,4 +134,6 @@ function fade(eid) {
 	element.FadeTimeLeft = TimeToFade;
 	
 	param.infoblock.handler.fade = setTimeout(function(){animateFade(new Date().getTime(),eid)}, 33);
+}
+
 }

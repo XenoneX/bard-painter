@@ -1,3 +1,6 @@
+function sketch(param) {
+
+
 param.sketch.draw = function() {
 
     if (param.points.length < 2) return;
@@ -109,4 +112,6 @@ param.sketch.draw = function() {
     var y = this.position.y;
 
     param.buffer.main.ctx.drawImage(buf.sketch.canv, x - param.translateCanv.x, y - param.translateCanv.y);
+}
+
 }
