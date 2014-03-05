@@ -10,8 +10,13 @@
 <body>
     <div id="paint-body" class="bard-room-planner" style="width: 1000px;height: 600px; margin: auto;"></div>
     <script>
-        paintInit({
+        var paint = new BardPainter({
             parentId: 'paint-body',
+            preloadPoints: [
+                {x: 132, y: 92},
+                {x: 270, y: 66},
+                {x: 249, y: 165}
+            ],
             done: function() {
                 log('done event');
             },
@@ -22,6 +27,22 @@
                 log('destroy event');
             }
         });
+    </script>
+
+    <div id="paint-body2" class="bard-room-planner" style="width: 1200px;height: 800px; margin: 20px auto;"></div>
+    <script>
+    var paint2 = new BardPainter({
+        parentId: 'paint-body2',
+        done: function() {
+            log('done event 2');
+        },
+        confirm: function() {
+            log('confirm event 2');
+        },
+        destroy: function() {
+            log('destroy event 2');
+        }
+    });
     </script>
 </body>
 </html>
