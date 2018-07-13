@@ -1,6 +1,7 @@
 //ver. 2.1.67
 var d = document;
 
+// Добавляем возможность перевести радианы в градусы
 Number.prototype.degree = function() {
     return this * Math.PI / 180;
 };
@@ -9,20 +10,27 @@ CanvasRenderingContext2D.prototype.dottedLineTo = dottedLineTo;
 CanvasRenderingContext2D.prototype.roundedRect = roundedRect;
 
 function dottedLineTo(x0, y0, x1, y1, l1, l2){
-/* x0, y0: Координаты точки начала рисования линии
- * x1, y1: Координаты точки окончания рисования линии
- * l1: Длина пунктира
- * l2: Длина промежутка между пунктирами
- * */
+	/* x0, y0: Координаты точки начала рисования линии
+	 * x1, y1: Координаты точки окончания рисования линии
+	 * l1: Длина пунктира
+	 * l2: Длина промежутка между пунктирами
+	 * */
+	 
+	// Если не задан промежуток, то берется длина пунктира
     l2 = l2 || l1;
 
+	// Получаем дельты по x и y
     var dx = x1 - x0;
     var dy = y1 - y0;
 
-    var L = Math.sqrt(dx * dx + dy * dy);//length of line
+	// Получаем длину линии
+    var L = Math.sqrt(dx * dx + dy * dy);
+	// Получаем длину пунктира (видимая часть и пропуск)
     var l = l1 + l2;
-    var n = L / l ^ 0;//number of slices
-    var dL = L - l * n;//residue
+    // Получаем целое количество частей пунктира
+    var n = L / l ^ 0;
+    // Получаем остаток от длины
+    var dL = L - l * n;
 
     var k = dL / L;
 
@@ -92,9 +100,9 @@ function dottedLineTo(x0, y0, x1, y1, l1, l2){
     this.moveTo(x1, y1);
 
     function currentLength(dx, dy) {
-          dx = dx || 0;
-          dy = dy || 0;
-          return Math.sqrt(Math.pow(x2 + dx - x0, 2) + Math.pow(y2 + dy - y0, 2));
+        dx = dx || 0;
+        dy = dy || 0;
+        return Math.sqrt(Math.pow(x2 + dx - x0, 2) + Math.pow(y2 + dy - y0, 2));
     }
 }
 function roundedRect(x, y, w, h, r){
@@ -486,15 +494,18 @@ Button.prototype.draw = function(coords, dX) {
 
 function beginDraw() {
 
+	// Делаем предварительную настройку
     if (!prepareLayer()) {
         //log('Application is broken');
         return;
     }
 
+	// Если все нормально, то стартуем
     startApp();
 
     function startApp() {
 
+		// Загружаем плагины, если есть
         initPlugins();
 
         if(!param.infoblock.loaded) {
@@ -1248,27 +1259,34 @@ function beginDraw() {
     }
 
     function prepareLayer() {
+	    // Если объекта с таким id нет, то выходим из алгоритма
         if(param.parentId == null || d.getElementById(param.parentId) == null) {
             //log('Parent element not declared');
             return false;
         }
 
+		// Вырубаем картинку, если в дивке есть какие-то картинки
         var placeholder = document.querySelector('#' + param.parentId + ' img');
         if (placeholder) {
             placeholder.style.display = 'none';
         }
 
+		// Делаем так, чтобы все что вылезает за пределы родительского
+		//  дива было невидимым
         var parent  = d.getElementById(param.parentId);
             parent.style.overflow = 'hidden';
 
+		// Создаем новый канвас для курсора
         var main = createCanvas({});
             main.canv.id = param.canvasId;
             main.canv.className = 'cursor';
 
+		// Создаем новый канвас для верхнего слоя
         var overlay = createCanvas({});
             overlay.canv.id = param.overlayId;
             overlay.canv.className = 'hidden';
 
+		// Добавляем в 
         parent.appendChild(main.canv);
         parent.appendChild(overlay.canv);
 
